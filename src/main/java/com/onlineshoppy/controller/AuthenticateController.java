@@ -38,17 +38,17 @@ public class AuthenticateController {
     @PostMapping("/generate-token")
     public ResponseEntity<?> generateToken(@RequestBody JwtRequest jwtRequest) throws Exception {
 
-            authenticate(jwtRequest.getUsername(), jwtRequest.getPassword());
+            authenticate(jwtRequest.getUsernameOrEmail(), jwtRequest.getPassword());
 
 
 
 
         /////////////authenticate
 
-        UserDetails userDetails = this.userDetailsService.loadUserByUsername(jwtRequest.getUsername());
+        UserDetails userDetails = this.userDetailsService.loadUserByUsername(jwtRequest.getUsernameOrEmail());
         String token = this.jwtUtils.generateToken(userDetails);
-       // String userName=this.jwtUtils.getUsernameFromToken(token);
-        return ResponseEntity.ok(new JwtResponse(token));
+        String userName=this.jwtUtils.getUsernameFromToken(token);
+        return ResponseEntity.ok(new JwtResponse(userName,token));
 
 
     }

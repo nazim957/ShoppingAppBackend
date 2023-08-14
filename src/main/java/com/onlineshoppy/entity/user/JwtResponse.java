@@ -10,6 +10,6 @@ import lombok.*;
 @ToString
 public class JwtResponse {
     String token;
-
+    String userName;
 
 }
