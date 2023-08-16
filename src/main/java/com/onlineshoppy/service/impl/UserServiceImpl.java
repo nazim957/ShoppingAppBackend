@@ -24,27 +24,33 @@ public class UserServiceImpl implements UserService {
 
     //creating user
     @Override
-    public User createUser(User user, Set<UserRole> userRoles) throws Exception {
+    public User createUser(User user, Set<UserRole> userRole) throws Exception {
 
-
-        User local = this.userRepository.findByUsername(user.getUsername());
-        if (local != null) {
-            System.out.println("User is already there !!");
-            throw new Exception("User Not Found");
-        } else {
+        User local=this.userRepository.findByUsername(user.getUsername());
+        User local2 = this.userRepository.findByEmail(user.getEmail());
+        if(local!=null)
+        {
+            System.out.println("User is already there!!");
+            throw new Exception("User Is There");
+        }
+        if(local2!=null)
+        {
+            System.out.println("Email Id Alraedy Exists");
+            throw new Exception("Email Id Alraedy Exists");
+        }
+        else {
             //user create
-            for (UserRole ur : userRoles) {
-                roleRepository.save(ur.getRole());
+            for(UserRole ur:userRole)
+            {
+                roleRepository.save(ur.getRole()); //save roles
             }
 
-            user.getUserRoles().addAll(userRoles);
+            user.getUserRoles().addAll(userRole);  //assign all roles to user
             local = this.userRepository.save(user);
 
         }
-
         return local;
     }
-
     //getting user by username
     @Override
     public User getUser(String username) {
